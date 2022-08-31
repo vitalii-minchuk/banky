@@ -5,21 +5,21 @@ import {
     signInWithEmailAndPassword,
     createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { getFirestore } from "@firebase/firestore";
-import { envVariables } from "./config/env";
+import { getFirestore } from "firebase/firestore";
+import { envs } from "./config/env";
 
 const firebaseConfig = {
-    apiKey: envVariables.API_KEY,
-    authDomain: envVariables.AUTH_DOMAIN,
-    projectId: envVariables.PROJECT_ID,
-    storageBucket: envVariables.STORAGE_BUCKET,
-    messagingSenderId: envVariables.MESSAGING_SENDER_ID,
-    appId: envVariables.APP_ID,
+    apiKey: envs.API_KEY,
+    authDomain: envs.AUTH_DOMAIN,
+    projectId: envs.PROJECT_ID,
+    storageBucket: envs.STORAGE_BUCKET,
+    messagingSenderId: envs.MESSAGING_SENDER_ID,
+    appId: envs.APP_ID,
 }
 
-initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
-export const auth = getAuth();
+export const auth = getAuth(app);
 
 export const register = (email: string, password: string) => 
     createUserWithEmailAndPassword(auth, email, password);
@@ -29,4 +29,5 @@ export const login =(email: string, password: string) =>
 
 export const logout = () => signOut(auth);
 
-export const db = getFirestore();
+export const db = getFirestore(app);
+

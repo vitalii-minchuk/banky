@@ -1,5 +1,5 @@
 import { onAuthStateChanged, User } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { setDoc, doc, addDoc, collection } from "firebase/firestore";
 import React, { createContext, FC, ReactNode, useEffect, useMemo, useState } from "react";
 import { Alert } from "react-native";
 import { auth, db, login, logout, register } from "../firebase";
@@ -27,10 +27,17 @@ export const AuthProvider: FC<IProvider> = ({ children }) => {
         try {
             const { user } = await register(email, password);
 
+            // const docData = {
+            //     _id: user.uid,
+            //     displayName: "No name",
+            // }
+
+            // await setDoc(doc(db, "users", email), docData);
             await addDoc(collection(db, "users"), {
-                _id: user.uid,
+                uid: user.uid,
+                email: user.email,
                 displayName: "No name",
-            });
+              });
         } catch (error: any) {
             Alert.alert("Error reg", error.message);
         } finally {
